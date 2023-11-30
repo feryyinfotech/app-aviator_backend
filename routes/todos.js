@@ -14,6 +14,8 @@ const { createCustomer } = require("../controller/Customer/createCustomer");
 const { changeStaus } = require("../controller/Customer/changeStatus");
 const { createShopKeeper, login_Api } = require("../controller/Shaloon/createShopKeeper");
 const { signupCustomer, login_Customer, getnearByShops } = require("../controller/Shaloon/getShopByCustomer");
+const { addTestData } = require("../controller/Test/addData");
+const { getTestData } = require("../controller/Test/getData");
 
 router.post("/createTodo", createTodo);
 router.get("/getTodo", getTodo);
@@ -40,5 +42,10 @@ router.post("/create/customer/shaloon",signupCustomer);
 router.post("/customer/login",login_Customer)
 router.post("/get/nearby_shop",getnearByShops)
 //cts
+
+
+// test
+router.post("/test",addTestData)
+router.get("/get-data",getTestData)
 
 module.exports = router;
