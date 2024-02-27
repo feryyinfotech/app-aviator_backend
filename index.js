@@ -1,34 +1,56 @@
-const express = require('express')
-const app = express()
-require('dotenv').config()
+const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const cors = require('cors');
+const todoRoutes = require('./routes/todos');
+require('dotenv').config();
+const conn = require('./config/database');
 
-// middeleware to pass
-app.use(express.json())
-// app.use(app.router);
-// routes.initialize(app);
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
-const PORT = process.env.PORT || 4000
+const corsOptions = {
+    origin: '*',
+    credentials: true,
+    optionSuccessStatus: 200
+};
 
-// import routes
-const todoRoutes = require('./routes/todos')
-//mounting
-app.use("/api/v1",todoRoutes)
+app.use(cors(corsOptions));
+app.use(express.json());
 
+const PORT = process.env.PORT || 4000;
 
-app.listen(PORT,()=>{
-    console.log("App start at 3000");
-})
+app.use("/api/v1", todoRoutes);
 
-// Connect to the database
-const dbConnect = require('./config/database')
-dbConnect()
+conn.connect((err) => {
+    if (err) {
+        console.log("error", err);
+    } else {
+        console.log("Connected");
+    }
+});
 
-// const createAllCountry = require('./controller/CST/createAllCountry')
-// createAllCountry()
-//default route
+// socket .io
+function generateAndSendMessage() {
+    const time = Math.floor(Math.random() * 20) + 10;
+    io.emit("message", time);
+    setTimeout(generateAndSendMessage, (time * 1000) + 8000);
+}
 
-const createAllState = require('./controller/CST/createAllCountry')
+let x = true;
+io.on('connection', (socket) => {
+    if (x) {
+        console.log("Function called");
+        generateAndSendMessage();
+        x = false;
+    }
+});
 
-app.get("/",(req,res)=>{
-    res.send(`<h1>This is run at ${PORT}</h1>`)
-})
+app.get("/", (req, res) => {
+    res.send(`<h1>This is run at ${PORT}</h1>`);
+});
+
+server.listen(PORT, () => {
+    console.log("Server listening on port", PORT);
+});
