@@ -5,7 +5,6 @@ const cors = require('cors');
 const todoRoutes = require('./routes/todos');
 require('dotenv').config();
 const conn = require('./config/database');
-const { startFly } = require('./controller/Aviator/internalTimeGeneration/internalTimeGeneration');
 
 const app = express();
 const httpServer = http.createServer(app);
