@@ -41,20 +41,25 @@ try {
     console.error('Error:', e);
 }
 
-// socket.io aviator time generation
+
 function generateAndSendMessage() {
     const time = Math.floor(Math.random() * 20) + 10;
     io.emit("message", time);
 
     let fly_time = 0;
+    let milliseconds = 0;
     let seconds = 0;
 
     io.emit("setloder", false);
     io.emit("isFlying", true);
 
     const timerInterval = setInterval(() => {
-        let milliseconds = String(fly_time % 1000).padStart(3, "0").substring(0, 2);
-        io.emit("seconds", `${milliseconds}_${seconds}`);
+        if (milliseconds >= 100) {
+            seconds += 1;
+            milliseconds = 0;
+        }
+
+        io.emit("seconds", `${String(milliseconds).padStart(2, "0")}_${seconds}`);
         const newTime = fly_time + 1;
 
         if (newTime >= time * 1000) {
@@ -62,14 +67,11 @@ function generateAndSendMessage() {
             fly_time = 0;
             milliseconds = 0;
             seconds = 0;
-            io.emit("seconds", `${milliseconds}_${seconds}`);
-        } else if (milliseconds >= 100) {
-            seconds += 1;
-            milliseconds = 0;
         }
 
+        milliseconds += 1;
         fly_time = newTime;
-    }, 10);
+    }, 70);
 
     setTimeout(() => {
         io.emit("isFlying", false);
@@ -87,6 +89,8 @@ function generateAndSendMessage() {
 
     setTimeout(generateAndSendMessage, (time * 1000) + 8000);
 }
+
+
 
 // color prediction game time generated every 1 min
 function generatedTimeEveryAfterEveryOneMin() {
