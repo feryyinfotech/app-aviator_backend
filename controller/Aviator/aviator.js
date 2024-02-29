@@ -3,6 +3,7 @@ const con = require('../../config/database')
 exports.aviatortest = async(req,res)=>{
   try{
     con.query('select * from user',(err,result)=>{
+      console.log(result,"result")
         if(result)
         return res.status(200).json({
          data:result,
