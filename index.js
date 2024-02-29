@@ -120,7 +120,7 @@ io.on('connection', (socket) => {
 });
 
 app.get("/", (req, res) => {
-    res.send(`<h1>This is running at ${PORT}</h1>`);
+    res.send(`<h1>Run at ${PORT}</h1>`);
 });
 
 httpServer.listen(PORT, () => {
