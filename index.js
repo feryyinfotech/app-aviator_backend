@@ -5,7 +5,6 @@ const cors = require("cors");
 const todoRoutes = require("./routes/todos");
 require("dotenv").config();
 const conn = require("./config/database");
-const _ = require("lodash"); // Import lodash
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -41,13 +40,6 @@ try {
 } catch (e) {
   console.error("Error:", e);
 }
-
-const throttledGenerateAndSendMessage = _.throttle(() => {
-  console.log("Hii annadd");
-}, 1000); //
-const debounce = _.debounce(() => {
-  console.log("Anand");
-}, 1000); // 5000 milliseconds debounce interval
 
 function generateAndSendMessage() {
   const time = Math.floor(Math.random() * 50) + 10;
@@ -161,8 +153,6 @@ let x = true;
 io.on("connection", (socket) => {
   if (x) {
     console.log("Functions called");
-    throttledGenerateAndSendMessage();
-    debounce();
     generateAndSendMessage(); // aviator game every random time
     generatedTimeEveryAfterEveryOneMin(); // color prediction game every 1 time generating time
     generatedTimeEveryAfterEveryThreeMin(); // color prediction game every 3 time generating time
