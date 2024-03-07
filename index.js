@@ -74,6 +74,7 @@ function generateAndSendMessage() {
 
   setTimeout(() => {
     io.emit("isFlying", false);
+    clearInterval(timerInterval);
   }, time * 1000);
 
   setTimeout(() => {
@@ -94,10 +95,13 @@ function generatedTimeEveryAfterEveryOneMin() {
   let seconds = 59;
   const interval = setInterval(() => {
     io.emit("onemin", seconds);
+    // console.log("time",seconds);
     seconds--;
     if (seconds < 0) {
       seconds = 59;
+      clearInterval(interval)
       generatedTimeEveryAfterEveryOneMin();
+      
     }
   }, 1000);
 }
@@ -109,7 +113,7 @@ const generatedTimeEveryAfterEveryThreeMin = () => {
 
   const interval = setInterval(() => {
     io.emit("threemin", `${min}_${sec}`);
-
+    console.log("Threemin",min,sec)
     sec--;
 
     if (sec < 0) {
@@ -119,6 +123,7 @@ const generatedTimeEveryAfterEveryThreeMin = () => {
       if (min < 0) {
         sec = 59;
         min = 2;
+        clearInterval(interval);
         generatedTimeEveryAfterEveryThreeMin();
       }
     }
@@ -143,6 +148,7 @@ const generatedTimeEveryAfterEveryFiveMin = () => {
         if (min < 0) {
           sec = 59;
           min = 4;
+          clearInterval(interval);
           generatedTimeEveryAfterEveryFiveMin();
         }
       }
@@ -162,7 +168,7 @@ io.on("connection", (socket) => {
 });
 
 app.get("/", (req, res) => {
-  res.send(`<h1>This is running at ${PORT}</h1>`);
+  res.send(`<h1>Server is running at ${PORT}</h1>`);
 });
 
 httpServer.listen(PORT, () => {
