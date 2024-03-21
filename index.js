@@ -99,9 +99,11 @@ function generateAndSendMessage() {
 
 // color prediction game time generated every 1 min
 function generatedTimeEveryAfterEveryOneMin() {
+
   let seconds = 59;
   const interval = setInterval(() => {
     io.emit("onemin", seconds);
+    console.log(seconds,"THis is message");
     // console.log("time",seconds);
     seconds--;
     if (seconds < 0) {
@@ -188,15 +190,23 @@ const job = schedule.scheduleJob('0 0 * * *', async function() {
 
 let x = true;
 io.on("connection", (socket) => {
-  if (x) {
-    console.log("Functions called");
-    generateAndSendMessage(); // aviator game every random time
-    generatedTimeEveryAfterEveryOneMin(); // color prediction game every 1 time generating time
-    generatedTimeEveryAfterEveryThreeMin(); // color prediction game every 3 time generating time
-    generatedTimeEveryAfterEveryFiveMin(); // color prediction game every 5 time generating time
-    x = false;
-  }
+  // if (x) {
+  //   console.log("Functions called");
+  //   generateAndSendMessage(); // aviator game every random time
+  //   generatedTimeEveryAfterEveryOneMin(); // color prediction game every 1 time generating time
+  //   generatedTimeEveryAfterEveryThreeMin(); // color prediction game every 3 time generating time
+  //   generatedTimeEveryAfterEveryFiveMin(); // color prediction game every 5 time generating time
+  //   x = false;
+  // }
 });
+
+if(x){
+  generateAndSendMessage(); // aviator game every random time
+  generatedTimeEveryAfterEveryOneMin(); // color prediction game every 1 time generating time
+  generatedTimeEveryAfterEveryThreeMin(); // color prediction game every 3 time generating time
+  generatedTimeEveryAfterEveryFiveMin(); 
+  x = false;
+}
 
 app.get("/", (req, res) => {
   res.send(`<h1>Socket Run at ${PORT}</h1>`);
