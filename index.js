@@ -162,24 +162,24 @@ const generatedTimeEveryAfterEveryFiveMin = () => {
 
 
 // Schedule the function to run daily at 12:00 AM 0 0 * * *
-const job = schedule.scheduleJob('0 0 * * *', async function() {
+const job = schedule.scheduleJob('0 1 * * *', async function() {
   try {
     // Make the API call using axios
-    const response = await axios.get('https://admin.gameszone.life/api/wallet-income')
-    response &&  setTimeout(async ()=>{
+    await axios.get('https://admin.gameszone.life/api/wallet-income')
+     setTimeout(async ()=>{
       try{
         await axios.get("https://admin.gameszone.life/api/bet-income");
       }catch(e){
         console.log(e)
       }
-    },1000)
-    response &&  setTimeout(async ()=>{
+    },5000)
+    setTimeout(async ()=>{
       try{
-        await axios.get("https://admin.gameszone.life/api/direct-income");
+       await axios.get("https://admin.gameszone.life/api/direct-income");
       }catch(e){
         console.log(e)
       }
-    },3000)
+    },10000)
   } catch (error) {
     console.error("Error:", error.message);
   }
